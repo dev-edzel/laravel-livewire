@@ -11,23 +11,29 @@
                     <tr>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Id</th>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Title</th>
-                      <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Status</th>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Image</th>
                       <th scope="col" class="relative px-6 py-3">Edit</th>
                     </tr>
                   </thead>
                   <tbody class="bg-white divide-y divide-gray-200">
                     <tr></tr>
-                    <tr>
-                      <td class="px-6 py-4 whitespace-nowrap">id</td>
-                      <td class="px-6 py-4 whitespace-nowrap">title</td>
-                      <td class="px-6 py-4 whitespace-nowrap">Active</td>
-                      <td class="px-6 py-4 whitespace-nowrap">
-                        <img class="w-8 h-8 rounded-full" src="https://avatarfiles.alphacoders.com/893/thumb-89303.gif" />
-                      </td>
-                      <td class="px-6 py-4 text-right text-sm">Edit Delete</td>
-                    </tr>
-                    <!-- More items... -->
+                    @foreach ($posts as $post)
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $post->id }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $post->title }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <img class="w-8 h-8 rounded-full" src="{{ Storage::url($post->image) }}" />
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm">
+                          <div class="flex space-x-2">
+                            <x-button wire:click="showEditPostModal({{ $post->id  }})"> Edit </x-button>
+                            <x-button class="bg-red-600 hover:bg-red-400" wire:click="deletePost({{ $post->id  }})"> Delete </x-button>
+                          </div>
+                          {{-- <x-button wire:click="showEditPostModal({{ $post->id  }})"> Edit </x-button>
+                          Delete --}}
+                        </td>
+                      </tr>
+                    @endforeach
                   </tbody>
                 </table>
                 <div class="m-2 p-2">Pagination</div>
@@ -37,35 +43,58 @@
     </div>
     <div>
         <x-dialog-modal wire:model="showingPostModal">
-            <x-slot name="title">Create Post</x-slot>
+            @if ($isEditMode)
+                <x-slot name="title">Update Post</x-slot>
+                @else
+                <x-slot name="title">Create Post</x-slot> 
+            @endif
             <x-slot name="content">
                 <div class="space-y-8 divide-y divide-gray-200 mt-10">
                     <form enctype="multipart/form-data">
                       <div class="sm:col-span-6">
                         <label for="title" class="block text-sm font-medium text-gray-700"> Post Title </label>
                         <div class="mt-1">
-                          <input type="text" id="title" wire:model.lazy="title" name="title" class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal sm:text-sm sm:leading-5" />
+                          <input type="text" id="title" wire:model.lazy="title" name="title" 
+                          class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal sm:text-sm sm:leading-5" />
                         </div>
+                        @error('title') <span class="text-red-400">{{ $message }}</span> @enderror
                       </div>
                       <div class="sm:col-span-6">
-                        <label for="title" class="block text-sm font-medium text-gray-700"> Post Image </label>
+                         <label for="title" class="block text-sm font-medium text-gray-700"> Post Image </label>
+                         @if ($oldImage)
+                         Old Image:
+                        <img src="{{ Storage::url($oldImage) }}">
+                          @endif
+                         @if ($newImage)
+                            Photo Preview:
+                           <img src="{{ $newImage->temporaryUrl() }}">
+                          @endif
                         <div class="mt-1">
-                          <input type="file" id="image" wire:model="newImage" name="image" class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal sm:text-sm sm:leading-5" />
+                          <input type="file" id="image" wire:model="newImage" name="image" 
+                          class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal sm:text-sm sm:leading-5" />
                         </div>
+                        @error('newImage') <span class="text-red-400">{{ $message }}</span> @enderror
                       </div>
                       <div class="sm:col-span-6 pt-5">
                         <label for="body" class="block text-sm font-medium text-gray-700">Body</label>
                         <div class="mt-1">
-                          <textarea id="body" rows="3" wire:model.lazy="body" class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+                          <textarea id="body" rows="3" wire:model.lazy="body" 
+                          class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal 
+                          focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
                         </div>
+                        @error('body') <span class="text-red-400">{{ $message }}</span> @enderror
                       </div>
                     </form>
                   </div>
                   
             </x-slot>
             
-            <x-slot name="footer">
-                <x-button wire:click="storePost">Store</x-button>
+            <x-slot name="footer"> 
+                @if ($isEditMode)
+                    <x-button wire:click="updatePost">Update</x-button>
+                    @else
+                    <x-button wire:click="storePost">Create</x-button>
+                @endif
             </x-slot>
         </x-dialog-modal>
     </div>
