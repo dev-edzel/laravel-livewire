@@ -2,6 +2,12 @@
     <div class="flex justify-end m-2 p-2">
         <x-button wire:click="showPostModal"> Create </x-button>
     </div>
+      <div class ="max-w-6xl mx-auto">
+        <div class="flex justify-end m-2 p-2"> 
+          {{-- <x-search wire:mode="search" class="form-control" float-end mx-2 style="width: 230px">
+          </x-search> --}}
+        </div>
+      </div>
     <div class="m-2 p-2">
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -12,10 +18,11 @@
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Id</th>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Title</th>
                       <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-200 uppercase tracking-wider">Image</th>
-                      <th scope="col" class="relative px-6 py-3">Edit</th>
+                      <th scope="col" class="relative px-6 py-3 w-32">Edit</th>
                     </tr>
                   </thead>
                   <tbody class="bg-white divide-y divide-gray-200">
+                   
                     <tr></tr>
                     @foreach ($posts as $post)
                       <tr>
@@ -25,22 +32,22 @@
                           <img class="w-8 h-8 rounded-full" src="{{ Storage::url($post->image) }}" />
                         </td>
                         <td class="px-6 py-4 text-right text-sm">
-                          <div class="flex space-x-2">
+                          <div class="flex space-x-2 ">
                             <x-button wire:click="showEditPostModal({{ $post->id  }})"> Edit </x-button>
                             <x-button class="bg-red-600 hover:bg-red-400" wire:click="deletePost({{ $post->id  }})"> Delete </x-button>
                           </div>
-                          {{-- <x-button wire:click="showEditPostModal({{ $post->id  }})"> Edit </x-button>
-                          Delete --}}
                         </td>
                       </tr>
                     @endforeach
+                    {{ $posts->links() }}
                   </tbody>
                 </table>
-                <div class="m-2 p-2">Pagination</div>
+                <div class="m-2 p-2"> </div>
               </div>
             </div>
           </div>          
     </div>
+
     <div>
         <x-dialog-modal wire:model="showingPostModal">
             @if ($isEditMode)
@@ -79,7 +86,7 @@
                         <label for="body" class="block text-sm font-medium text-gray-700">Body</label>
                         <div class="mt-1">
                           <textarea id="body" rows="3" wire:model.lazy="body" 
-                          class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal 
+                          class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border rounded-md py-2 px-3 text-base leading-normal 
                           focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
                         </div>
                         @error('body') <span class="text-red-400">{{ $message }}</span> @enderror
