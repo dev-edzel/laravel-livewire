@@ -4,11 +4,15 @@
     </div>
       <div class ="max-w-6xl mx-auto">
         <div class="flex justify-end m-2 p-2"> 
-          {{-- <x-search wire:mode="search" class="form-control" float-end mx-2 style="width: 230px">
-          </x-search> --}}
+          <x-search wire:mode="search" class="form-control"
         </div>
       </div>
+    
     <div class="m-2 p-2">
+      <div class="flex items-center justify-between mb-4">
+        <input type="search" wire:model.debounce.500ms="searchTerm" class="w-full rounded-md lg:w-1/3 xl:w-1/4 p-4 text-gray-700 placeholder-gray-400" placeholder="Search...">
+        <button wire:click="resetSearchTerm" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Clear</button>
+    </div>
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -39,10 +43,10 @@
                         </td>
                       </tr>
                     @endforeach
-                    {{ $posts->links() }}
                   </tbody>
                 </table>
-                <div class="m-2 p-2"> </div>
+              
+                    <div class="m-2 p-2">{{ $posts->links() }}</div>
               </div>
             </div>
           </div>          
@@ -86,7 +90,7 @@
                         <label for="body" class="block text-sm font-medium text-gray-700">Body</label>
                         <div class="mt-1">
                           <textarea id="body" rows="3" wire:model.lazy="body" 
-                          class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border rounded-md py-2 px-3 text-base leading-normal 
+                          class="shadow-sm focus:ring-indigo-500 appearance-none bg-white border py-2 px-3 text-base leading-normal 
                           focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
                         </div>
                         @error('body') <span class="text-red-400">{{ $message }}</span> @enderror
@@ -101,6 +105,7 @@
                     <x-button wire:click="updatePost">Update</x-button>
                     @else
                     <x-button wire:click="storePost">Create</x-button>
+                    
                 @endif
             </x-slot>
         </x-dialog-modal>

@@ -10,7 +10,7 @@ use Livewire\WithFileUploads;
 
 class PostIndex extends Component
 {   
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
     public $showingPostModal = false;
 
     public $title;
@@ -19,12 +19,15 @@ class PostIndex extends Component
     public $oldImage;
     public $isEditMode = false;
     public $post;
+    public $search;
+    public $searchTerm;
 
 
     public function showPostModal()
     {
         $this->reset();
         $this->showingPostModal = true;
+        $this->search = '';
         
     }
 
@@ -54,6 +57,7 @@ class PostIndex extends Component
         $this->oldImage = $this->post->image;
         $this->isEditMode = true;
         $this->showingPostModal = true;
+        $this->search = '';
     }
 
     public function updatePost()
@@ -85,8 +89,14 @@ class PostIndex extends Component
 
     public function render()
     {
-        return view('livewire.post-index', [
-            'posts' => Post::paginate(10),
-        ]);
+        $posts = Post::paginate(5);
+
+        return view('livewire.post-index', compact('posts'));
     }
+    
+    public function resetSearchTerm()
+    {
+        $this->searchTerm = '';
+    }
+
 }
