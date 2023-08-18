@@ -90,13 +90,10 @@ class PostIndex extends Component
     public function render()
     {
         $posts = Post::paginate(5);
-
+        
+        
         return view('livewire.post-index', compact('posts'));
     }
     
-    public function resetSearchTerm()
-    {
-        $this->searchTerm = '';
-    }
 
 }

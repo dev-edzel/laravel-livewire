@@ -2,20 +2,19 @@
     <div class="flex justify-end m-2 p-2">
         <x-button wire:click="showPostModal"> Create </x-button>
     </div>
-      <div class ="max-w-6xl mx-auto">
-        <div class="flex justify-end m-2 p-2"> 
-          <x-search wire:mode="search" class="form-control"
-        </div>
-      </div>
     
     <div class="m-2 p-2">
       <div class="flex items-center justify-between mb-4">
-        <input type="search" wire:model.debounce.500ms="searchTerm" class="w-full rounded-md lg:w-1/3 xl:w-1/4 p-4 text-gray-700 placeholder-gray-400" placeholder="Search...">
-        <button wire:click="resetSearchTerm" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Clear</button>
+        {{-- <input type="search" wire:model.debounce.500ms="searchTerm" class="w-full rounded-md lg:w-1/3 xl:w-1/4 p-4 text-gray-700 placeholder-gray-400" placeholder="Search...">
+        <button wire:click="resetSearchTerm" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded">Clear</button> --}}
     </div>
+    
         <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
               <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <div class="m-2 p-2"> 
+                  <input type="search" wire:model="searchTerm" class="form-control rounded-md" placeholder="Search...">
+                  </div>
                 <table class="min-w-full divide-y divide-gray-200">
                   <thead class="bg-gray-50 dark:bg-gray-600 dark:text-gray-200">
                     <tr>
@@ -63,7 +62,7 @@
                 <div class="space-y-8 divide-y divide-gray-200 mt-10">
                     <form enctype="multipart/form-data">
                       <div class="sm:col-span-6">
-                        <label for="title" class="block text-sm font-medium text-gray-700"> Post Title </label>
+                        <label for="title" class="block text-s  m font-medium text-gray-700"> Post Title </label>
                         <div class="mt-1">
                           <input type="text" id="title" wire:model.lazy="title" name="title" 
                           class="block w-full appearance-none bg-white border border-gray-400 rounded-md py-2 px-3 text-base leading-normal sm:text-sm sm:leading-5" />
